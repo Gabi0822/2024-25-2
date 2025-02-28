@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('ticket_user', function (Blueprint $table) {
             $table->id();
-            $table->string('text');
-            $table->string('filename')->nullable();
-            $table->string('filename_hash')->nullable();
+            $table->boolean('owner')->default(false);
             $table->timestamps();
 
             $table->unsignedBigInteger('ticket_id');
@@ -23,7 +21,6 @@ return new class extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('ticket_user');
     }
 };
