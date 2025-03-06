@@ -17,6 +17,13 @@ return new class extends Migration
             $table->string('filename')->nullable();
             $table->string('filename_hash')->nullable();
             $table->timestamps();
+
+            $table->unsignedBigInteger('ticket_id');
+            $table->foreign('ticket_id')->references('id')->on('tickets');
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
         });
     }
 
