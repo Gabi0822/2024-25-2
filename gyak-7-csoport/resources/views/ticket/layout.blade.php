@@ -60,12 +60,21 @@
 					</ul>
 					<div class="d-flex">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item">
-								<a class="nav-link" href="#">Bejelentkezés</a>
+                            @auth
+                            <li class="nav-item">
+								<form action="{{ route('logout')}}" method="post">
+                                    @csrf
+                                    <button class="btn nav-link"> Kijelentkezés</button>
+                                </form>
+							</li>
+							@else
+                            <li class="nav-item">
+								<a class="nav-link" href="{{ route('login')}}">Bejelentkezés</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">Regisztráció</a>
+								<a class="nav-link" href="{{ route('register')}}">Regisztráció</a>
 							</li>
+                            @endauth
 						</ul>
 					</div>
 				</div>

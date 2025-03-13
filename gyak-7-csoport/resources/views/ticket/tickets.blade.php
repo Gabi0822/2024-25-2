@@ -1,4 +1,4 @@
-@extemds('ticket.layout')
+@extends('ticket.layout')
 
 @section('title', 'Feladatok')
 
@@ -47,7 +47,7 @@
                     </td>
                     <td>
                         <div>
-                            <a href="{{ route('tickets.show', ['ticket'] => $ticket->id)}}">{{ $ticket->title}}</a>
+                            <a href="{{ route('tickets.show', ['ticket' => $ticket->id])}}">{{ $ticket->title}}</a>
                         </div>
                     </td>
                     <td>
