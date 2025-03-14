@@ -20,10 +20,23 @@
 					</thead>
                     <tbody class="text-center">
                         @foreach ($tickets as $ticket)
-						<tr class="table-danger">
+						<tr class="@if($ticket->priority == 3) table-danger @elseif($ticket->priority == 2) table-warning @endif">
 							<td>
-								<span class="badge rounded-pill bg-danger fs-6">Azonnal</span>
-							</td>
+                                @switch($ticket->priority)
+                                    @case(0)
+								        <span class="badge rounded-pill bg-info fs-6">Alacsony</span>
+                                    @break
+                                    @case(1)
+                                        <span class="badge rounded-pill bg-success fs-6">Normal</span>
+                                    @break
+                                    @case(2)
+                                        <span class="badge rounded-pill bg-warning fs-6">Magas</span>
+                                    @break
+                                    @case(3)
+                                        <span class="badge rounded-pill bg-danger fs-6">Azonnal</span>
+                                    @break
+                                @endswitch
+                            </td>
 							<td>
 								<div> {{ $ticket->owner->first()->name}}</div>
 								<div class="text-secondary"> {{ $ticket->created_at}} </div>
@@ -34,17 +47,21 @@
 							</td>
 							<td>
 								<div>
-									<a href="{{ route('tickets.show', ['ticket' => $ticket->id])}}">{{ $ticket->title}}</a>
+									<a href="#">{{ $ticket->title}}</a>
 								</div>
 							</td>
 							<td>
-								<span class="badge rounded-pill bg-info text-dark fs-6"
-									>Új</span
-								>
+                                @if($ticket->done)
+								    <span class="badge rounded-pill bg-info text-dark fs-6">Lezàrva</span>
+                                @elseif($ticket->comments->count() === 1)
+                                    <span class="badge rounded-pill bg-info text-dark fs-6">Új</span>
+                                @else
+                                    <span class="badge rounded-pill bg-info text-dark fs-6">Folyamatban</span>
+                                @endif
 							</td>
 							<td>
 								<button class="btn btn-outline-secondary">
-									<i class="fa-solid fa-angles-right fa-fw"></i>
+									<a href="{{ route('tickets.show', ['ticket' => $ticket->id])}}"><i class="fa-solid fa-angles-right fa-fw"></i></a>
 								</button>
 							</td>
 						</tr>
