@@ -15,6 +15,7 @@ class Comment extends Model
         'text',
         'filename',
         'filename_hash',
+        'ticket_id',
         'user_id'
     ];
 
