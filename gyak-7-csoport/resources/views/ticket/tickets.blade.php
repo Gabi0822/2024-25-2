@@ -18,35 +18,35 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-
                 @foreach ($tickets as $ticket)
                     <tr class="@if($ticket->priority == 3) table-danger @elseif($ticket->priority == 2) table-warning @endif">
                         <td>
                             @switch($ticket->priority)
                                 @case(0)
                                     <span class="badge rounded-pill bg-info fs-6">Alacsony</span>
-                                    @break
+                                @break
 
                                 @case(1)
                                     <span class="badge rounded-pill bg-success fs-6">Normál</span>
-                                    @break
+                                @break
 
                                 @case(2)
-                                    <span class="badge rounded-pill bg-warning text-black fs-6">Magas</span>
-                                    @break
+                                    <span class="badge rounded-pill bg-warning fs-6">Magas</span>
+                                @break
 
                                 @case(3)
                                     <span class="badge rounded-pill bg-danger fs-6">Azonnal</span>
-                                    @break
+                                @break
+
                             @endswitch
                         </td>
                         <td>
-                            <div>{{ $ticket->owner->first()->name }}</div>
+                            <div>{{ $ticket->owner()->first()->name }}</div>
                             <div class="text-secondary">{{ $ticket->created_at }}</div>
                         </td>
                         <td>
-                            <div>{{ $ticket->comments()->orderByDesc('created_at')->first()->user->name }}</div>
-                            <div class="text-secondary">{{ $ticket->comments()->orderByDesc('created_at')->first()->created_at }}</div>
+                            <div>{{ $ticket->comments()->orderBy('created_at', 'desc')->first()->user->name }}</div>
+                            <div class="text-secondary">{{ $ticket->comments()->orderBy('created_at', 'desc')->first()->created_at }}</div>
                         </td>
                         <td>
                             <div>
@@ -56,7 +56,7 @@
                         <td>
                             @if ($ticket->done)
                                 <span class="badge rounded-pill bg-info text-dark fs-6">Lezárva</span>
-                            @elseif ($ticket->comments()->count() === 1)
+                            @elseif($ticket->comments->count() === 1)
                                 <span class="badge rounded-pill bg-info text-dark fs-6">Új</span>
                             @else
                                 <span class="badge rounded-pill bg-info text-dark fs-6">Folyamatban</span>
@@ -69,8 +69,8 @@
                         </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
+        {{ $tickets->links() }}
     </div>
 @endsection

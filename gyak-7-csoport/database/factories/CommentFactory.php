@@ -20,8 +20,8 @@ class CommentFactory extends Factory
         $tmp = fake()->boolean();
         return [
             'text' => fake()->paragraph(),
-            'filename' => $tmp ? 'image.png' : null,
-            'filename_hash' => $tmp ? 'image.png' : null,
+            //'filename' => $tmp ? 'image.png' : null,
+            //'filename_hash' => $tmp ? 'image.png' : null,
         ];
     }
 }

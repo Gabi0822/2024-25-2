@@ -11,7 +11,7 @@ class TicketController extends Controller
 {
     public function index()
     {
-        $tickets = Auth::user()->tickets()->where('done', false)->get();
+        $tickets = Auth::user()->tickets()->where('done', false)->orderByDesc(Comment::select('updated_at')->whereColumn('comments.ticket_id','tickets.id')->latest()->take(1))->paginate(3);
 
         //$tickets = Ticket::all();
 
@@ -28,6 +28,7 @@ class TicketController extends Controller
             'title' => 'required|string|min:5|max:100',
             'priority' => 'required|integer|min:0|max:3',
             'text' => 'required|string|max:1000',
+            'file' =>  'nullable|file'
         ]);
 
         //send the data
@@ -42,11 +43,30 @@ class TicketController extends Controller
         //Attach user
         $ticket->users()->attach(Auth::id(),['owner' => true]);
 
+        /*
         Comment::create([
             'text' => $validated['text'],
             'ticket_id' => $ticket->id,
             'user_id' => Auth::id(),
         ]);
+        */
+
+        //With file management
+        if($request->hasFile('file')) {
+            $filename = $request->file('file')->store();
+            $ticket->comments()->create([
+                'text' => $validated['text'],
+                'user_id' => Auth::id(),
+                'filename' => $request->file('file')->getClientOriginalName(),
+                'filename_hash' => $filename,
+            ]);
+        } else {
+            $ticket->comments()->create([
+                'text' => $validated['text'],
+                'user_id' => Auth::id(),
+            ]);
+        }
+
 
         return redirect()->route('tickets.show', ['ticket' => $ticket->id]);
     }
@@ -97,5 +117,17 @@ class TicketController extends Controller
         return redirect()->route('tickets.show', ['ticket' => $ticket->id]);
     }
 
-    public function destroy(string $id) {}
+    public function destroy(string $id) {
+        $ticket = Ticket::findOrFail($id);
+
+        if(!$ticket->users->contains(Auth::id()) && !Auth::user()->admin){
+            abort(401);
+        }
+
+        $ticket->comments()->delete();
+        $ticket->delete();
+
+        return redirect()->route('tickets.index');
+
+    }
 }
