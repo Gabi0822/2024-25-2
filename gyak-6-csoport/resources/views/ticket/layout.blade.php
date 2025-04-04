@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Ticket | @yield('title' )</title>
+		<title>Ticket | @yield('title')</title>
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -20,7 +20,7 @@
 		/>
 	</head>
     <body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid mx-5">
 				<a class="navbar-brand" href="#">Ticket</a>
 				<button
@@ -61,17 +61,19 @@
 					<div class="d-flex">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             @auth
-                                <form action="{{ route('logout')}}" method="post">
+                            <li class="nav-item">
+								<form action="{{ route('logout')}}" method="post">
                                     @csrf
-                                    <button class="btn nav-link">Kijelentkezés</button>
+                                    <button class="btn nav-link"> Kijelentkezés</button>
                                 </form>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login')}}">Bejelentkezés</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register')}}">Regisztráció</a>
-                                </li>
+							</li>
+							@else
+                            <li class="nav-item">
+								<a class="nav-link" href="{{ route('login')}}">Bejelentkezés</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{{ route('register')}}">Regisztráció</a>
+							</li>
                             @endauth
 						</ul>
 					</div>
@@ -85,6 +87,6 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"
-    ></script>
+        ></script>
     </body>
 </html>

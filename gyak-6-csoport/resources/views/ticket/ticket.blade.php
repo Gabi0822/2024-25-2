@@ -3,71 +3,71 @@
 @section('title', $ticket->title)
 
 @section('content')
-
 <div class="d-flex">
     <h1 class="ps-3 me-auto">
         {{$ticket->title}}
-                                @switch($ticket->priority)
-                                    @case(0)
-								        <span class="badge rounded-pill bg-info fs-6">Alacsony</span>
-                                    @break
-                                    @case(1)
-                                        <span class="badge rounded-pill bg-success fs-6">Normal</span>
-                                    @break
-                                    @case(2)
-                                        <span class="badge rounded-pill bg-warning fs-6">Magas</span>
-                                    @break
-                                    @case(3)
-                                        <span class="badge rounded-pill bg-danger fs-6">Azonnal</span>
-                                    @break
-                                @endswitch
-    </h1>
-    <button
+        @switch($ticket->priority)
+            @case(0)
+                <span class="badge rounded-pill bg-info fs-6">Alacsony</span>
+                @break
+            @case(1)
+                <span class="badge rounded-pill bg-success fs-6">Norrmàl</span>
+                @break
+            @case(2)
+                <span class="badge rounded-pill bg-warning text-black fs-6">Magas</span>
+                @break
+            @case(3)
+                <span class="badge rounded-pill bg-danger fs-6">Azonnali</span>
+                @break
+        @endswitch
+        </h1>
+        <a href={{ route('tickets.edit', ['ticket' => $ticket->id])}}
         class="btn btn-primary mx-1"
         data-bs-toggle="tooltip"
         data-bs-placement="bottom"
         title="Szerkesztés"
-    >
+        >
         <i class="fa-solid fa-pen-to-square fa-fw fa-xl"></i>
-    </button>
-    <button
+        </a>
+        <button
         class="btn btn-primary mx-1"
         data-bs-toggle="tooltip"
         data-bs-placement="bottom"
         title="Felhasználók"
-    >
+        >
         <i class="fa-solid fa-users fa-fw fa-xl"></i>
-    </button>
-    <button
+        </button>
+        <button
         class="btn btn-success mx-1"
         data-bs-toggle="tooltip"
         data-bs-placement="bottom"
         title="Lezárás"
-    >
+        >
         <i class="fa-solid fa-check fa-fw fa-xl"></i>
-    </button>
-    <button
+        </button>
+        <form action="{{ route('tickets.destroy', ['ticket' => $ticket->id])}}" method="post">
+            @csrf
+            @method('DELETE')
+        <button
         class="btn btn-danger mx-1"
         data-bs-toggle="tooltip"
         data-bs-placement="bottom"
         title="Törlés"
-    >
+        >
         <i class="fa-solid fa-trash fa-fw fa-xl"></i>
-    </button>
-</div>
+        </button>
+        </form>
+    </div>
 <hr />
-@foreach( $ticket->comments()->orderBy('created_at', 'desc')->get() as $comment)
+@foreach ($ticket->comments()->orderBy('created_at','desc')->get() as $comment)
 <div class="card mb-3">
     <div class="card-header d-flex">
-        <div class="me-auto">
-            <span class="badge bg-secondary">#{{$loop->index}}</span> |
-            <strong>{{$comment->user->name}}</strong> | {{$comment->created_at}}
+        <div class="card-header d-flex">
+            <div class="me-auto"><span class="badge bg-secondary">#{{ $loop->index }}</span> | <strong>{{ $comment->user->name }}</strong> | {{ $comment->created_at }}</div>
             @if ($comment->filename)
-                <div><a href="#"><i class="fa-solid fa-download"></i></a></div>
+                <div><a download="{{ $comment->filename }}" href="{{ Storage::url($comment->filename_hash) }}"><i class="fa-solid fa-download"></i></a></div>
             @endif
-
         </div>
-        <div></div>
     </div>
     <div class="card-body">
         <pre> {{$comment->text}}</pre>
