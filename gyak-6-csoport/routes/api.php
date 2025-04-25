@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ApiController;
 use App\Http\Middleware\ValidateURIParams;
 
 Route::post('register', [ApiAuthController::class, 'register'])->name('api.register');
@@ -54,3 +55,9 @@ Route::get('uri-params3/{number}/{string}/{optional?}', function ($number, $stri
 
     return response()->json($errors, 418);
 });
+
+Route::post(  'tickets',           [ApiController::class, 'store'])              ->name('api.tickets.store');
+Route::get(   'tickets/paginated', [ApiController::class, 'getTicketsPaginated'])->name('api.tickets.getTicketsPaginated');
+Route::get(   'tickets/{id?}',     [ApiController::class, 'getTickets'])         ->name('api.tickets.getTickets')         ->where('id', '[0-9]+');
+Route::put(   'tickets/{id}',      [ApiController::class, 'update'])             ->name('api.tickets.update')             ->where('id', '[0-9]+');
+Route::delete('tickets/{id}',      [ApiController::class, 'destroy'])            ->name('api.tickets.destroy')            ->where('id', '[0-9]+');

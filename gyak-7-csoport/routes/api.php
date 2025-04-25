@@ -58,3 +58,10 @@
     return response()->json($errors, 418);
  });
 
+//Ticket REST vegpontok
+Route::get('tickets/{id?}', [ApiAuthController::class,'getTickets'])->where('id','[0-9]+')->name('api.tickets.getTickets');
+Route::get(   'tickets/paginated', [ApiAuthController::class, 'getTicketsPaginated'])->name('api.tickets.getTicketsPaginated');
+Route::post('tickets', [ApiAuthController::class,'store'])->name('api.tickets.store');
+Route::put('tickets/{id}', [ApiAuthController::class,'update'])->where('id','[0-9]+')->name('api.tickets.update');
+Route::delete('tickets/{id}', [ApiAuthController::class,'destroy'])->where('id','[0-9]+')->name('api.tickets.destroy');
+
