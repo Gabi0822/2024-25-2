@@ -6,7 +6,7 @@
  use App\Http\Middleware\ValidateURIParams;
 
  Route::post('register', [ApiAuthController::class, 'register'])->name('api.register');
- Route::post('login', [ApiAuthController::class, 'login'])->name-('api.login');
+ Route::post('login', [ApiAuthController::class, 'login'])->name('api.login');
 
 /*
  Route::get('/user', function (Request $request) {
@@ -28,7 +28,7 @@
         'string' => $string,
         'optional' => $optional,
     ]);
- })->where('number', '[0-9]+')->where('string', '[A-Za-Z]+');
+ })->where('number', '[0-9]+')->where('string', '[a-zA-Z]+');
 
  //2. Middleware keszitese
  Route::get('uri-params2/{number}/{string}/{optional?}', function ($number, $string, $optional = null) {
@@ -65,3 +65,4 @@ Route::post('tickets', [ApiAuthController::class,'store'])->name('api.tickets.st
 Route::put('tickets/{id}', [ApiAuthController::class,'update'])->where('id','[0-9]+')->name('api.tickets.update');
 Route::delete('tickets/{id}', [ApiAuthController::class,'destroy'])->where('id','[0-9]+')->name('api.tickets.destroy');
 
+Route::post('tickets/{id}/users', [ApiAuthController::class,'syncUsers'])->name('api.tickets.syncUsers')->where('id', '[0-9]+');

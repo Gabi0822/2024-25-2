@@ -179,4 +179,58 @@
         return response(status: 204);
 
     }
+
+    //Osszetettebb vegpontok
+    public function syncUsers(Request $request, $id) {
+        $ticket = Ticket::findOrFail($id);
+
+        if(!$ticket->users->contains(Auth::id()) && !$request->user()->tokenCan('ticket:admin')){
+            return response()->json(['error' => 'Nincs jogosultsaga ehhez'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'up' => 'array',
+            'down' => 'array',
+            'up.*' => 'integer|exists:users,id',
+            'down.*' => 'integer|exists:users,id',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages()
+            ], 400);
+        }
+
+        $validated = $validator->validated();
+
+        $users = $ticket->users;
+
+        $output =[
+            'successUp' => [],
+            'successDown' => [],
+            'alreadyUp' => [],
+            'alreadyDown' => [],
+        ];
+
+        foreach ( $validated['up'] as $userUp ) {
+            if($users->contains($userUp)) {
+                $output['alreadyUp'][] = $userUp;
+            } else {
+                $ticket->users()->attach($userUp);
+                $output['successUp'][] = $userUp;
+            }
+        }
+
+        foreach ( $validated['down'] as $userDown ) {
+            if($users->contains($userDown)) {
+                $ticket->users()->detach($userDown);
+                $output['successDown'][] = $userDown;
+            } else {
+                $output['alreadyDown'][] = $userDown;
+            }
+        }
+
+        return response()->json($output);
+
+    }
  }
